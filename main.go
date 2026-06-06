@@ -6,10 +6,10 @@ import (
 )
 
 func main() {
-	didTestSucceed := db.NewDBTest()
-	if !didTestSucceed {
-		log.Fatal("Database test failed")
-	} else {
+	didTestSucceed := db.NewDirectDBTest()
+	if didTestSucceed {
 		log.Println("Database test succeeded")
+	} else {
+		log.Fatal("Database test failed")
 	}
 }
