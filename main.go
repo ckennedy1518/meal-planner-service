@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"meal-planner-service/pkg/db"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	didTestSucceed := db.NewDBTest()
+	if !didTestSucceed {
+		log.Fatal("Database test failed")
+	} else {
+		log.Println("Database test succeeded")
+	}
 }
