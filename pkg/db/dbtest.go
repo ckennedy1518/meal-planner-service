@@ -4,41 +4,74 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 func NewDirectDBTest() bool {
+	godotenv.Load()
+	myUserId := os.Getenv("MY_USER_ID")
+
 	client, err := NewDirectDB()
 	if err != nil {
 		log.Fatal("Failed to connect to the database directly (dbtest.go): ", err)
 		return false
 	}
 
-	userRow := map[string]interface{}{
+	ingredient := map[string]interface{}{
 		"id":         1,
-		"username":   "example_user",
-		"email":      "user@example.com",
-		"phone":      "555-555-1234",
+		"name":       "Salt",
 		"created_at": time.Now(),
 	}
 
-	ret, _, err := client.From("user").Insert(userRow, false, "", "representation", "exact").Execute()
+	ret, _, err := client.From("ingredient").Insert(ingredient, false, "", "representation", "exact").Execute()
 	if err != nil {
-		log.Fatal("Failed to insert user via direct connection (dbtest.go): ", err)
+		log.Fatal("Failed to insert pantryItem via direct connection (dbtest.go): ", err)
 		return false
 	}
 
 	// Parse JSON response
-	var users []map[string]interface{}
-	err = json.Unmarshal(ret, &users)
+	var ingredients []map[string]interface{}
+	err = json.Unmarshal(ret, &ingredients)
 	if err != nil {
-		log.Fatal("Failed to parse response:", err)
+		log.Fatal("Failed to parse ingredients response:", err)
 		return false
 	}
 
-	if len(users) > 0 {
-		id := users[0]["id"]
-		log.Printf("Inserted user with ID: %v", id)
+	if len(ingredients) > 0 {
+		id := ingredients[0]["id"]
+		log.Printf("Inserted ingredient with ID: %v", id)
+	}
+
+	pantryItem := map[string]interface{}{
+		"id":            1,
+		"ingredient_id": 1,
+		"amount":        1000,
+		"unit":          "tsp",
+		"is_staple":     true,
+		"user_id":       myUserId,
+		"created_at":    time.Now(),
+	}
+
+	ret, _, err = client.From("pantry_item").Insert(pantryItem, false, "", "representation", "exact").Execute()
+	if err != nil {
+		log.Fatal("Failed to insert pantryItem via direct connection (dbtest.go): ", err)
+		return false
+	}
+
+	// Parse JSON response
+	var pantryItems []map[string]interface{}
+	err = json.Unmarshal(ret, &pantryItems)
+	if err != nil {
+		log.Fatal("Failed to parse pantryItems response:", err)
+		return false
+	}
+
+	if len(pantryItems) > 0 {
+		id := pantryItems[0]["id"]
+		log.Printf("Inserted pantryItem with ID: %v", id)
 	}
 
 	return true
