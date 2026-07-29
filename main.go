@@ -28,6 +28,7 @@ func main() {
 	handler := controllers.NewHandler(authService)
 
 	http.HandleFunc("/profile", service.AuthMiddleware(authService, handler.Profile))
+	http.HandleFunc("/getPantryInfo", service.AuthMiddleware(authService, handler.GetPantryInfo))
 
 	// start server
 	log.Println("Server running at :8080")
