@@ -10,13 +10,13 @@ import (
 )
 
 type IngredientRelation struct {
-	Name string `json:"name"`
+	Name     string `json:"name"`
+	IsStaple bool   `json:"isStaple"`
 }
 
 type PantryItemResponse struct {
 	Amount     int                `json:"amount"`
 	Unit       string             `json:"unit"`
-	IsStaple   bool               `json:"isStaple"`
 	Ingredient IngredientRelation `json:"ingredient"`
 }
 
@@ -54,7 +54,7 @@ func (h *Handler) GetPantryInfo(w http.ResponseWriter, r *http.Request) {
 
 	// execute query
 	resp, _, err := client.From("pantry_item").
-		Select("amount,unit,is_staple,ingredient(name)", "", false).
+		Select("amount,unit,ingredient(name,is_staple)", "", false).
 		Eq("user_id", userID).
 		Execute()
 	if err != nil {
@@ -77,7 +77,7 @@ func (h *Handler) GetPantryInfo(w http.ResponseWriter, r *http.Request) {
 			Name:     item.Ingredient.Name,
 			Quantity: item.Amount,
 			Unit:     item.Unit,
-			IsStaple: item.IsStaple,
+			IsStaple: item.Ingredient.IsStaple,
 		})
 	}
 
