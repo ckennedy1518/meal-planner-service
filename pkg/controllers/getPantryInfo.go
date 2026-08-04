@@ -11,7 +11,7 @@ import (
 
 type IngredientRelation struct {
 	Name     string `json:"name"`
-	IsStaple bool   `json:"isStaple"`
+	IsStaple bool   `json:"is_staple"`
 }
 
 type PantryItemResponse struct {
