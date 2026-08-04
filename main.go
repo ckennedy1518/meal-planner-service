@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"meal-planner-service/pkg/controllers"
+
+	// "meal-planner-service/pkg/db"
 	"meal-planner-service/pkg/service"
 	"net/http"
 	"os"
@@ -29,6 +31,7 @@ func main() {
 
 	http.HandleFunc("/profile", service.AuthMiddleware(authService, handler.Profile))
 	http.HandleFunc("/getPantryInfo", service.AuthMiddleware(authService, handler.GetPantryInfo))
+	http.HandleFunc("/getGroceryLists", service.AuthMiddleware(authService, handler.GetGroceryLists))
 
 	// start server
 	log.Println("Server running at :8080")
