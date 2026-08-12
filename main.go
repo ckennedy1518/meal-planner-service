@@ -32,6 +32,7 @@ func main() {
 	http.HandleFunc("/profile", service.AuthMiddleware(authService, handler.Profile))
 	http.HandleFunc("/getPantryInfo", service.AuthMiddleware(authService, handler.GetPantryInfo))
 	http.HandleFunc("/getGroceryLists", service.AuthMiddleware(authService, handler.GetGroceryLists))
+	http.HandleFunc("/getIngredients", service.AuthMiddleware(authService, handler.GetIngredients))
 
 	// start server
 	log.Println("Server running at :8080")
